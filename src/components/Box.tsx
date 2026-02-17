@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import type { BoxCreatorProps } from './BoxCreator.tsx';
+import type { BoxCreatorProps, BoxCreatorMinProps } from './BoxCreator.tsx';
+
+export type BoxMinProps = BoxCreatorMinProps;
 
 export type BoxProps = Omit<BoxCreatorProps, 'onMouseDown'> & {
     boxKey: number,
@@ -27,7 +29,7 @@ export default function Box(props: BoxProps) {
         props.onMouseDown(e, props);
     }
 
-    const handleMouseUp = (e: React.MouseEvent): void => {
+    const handleMouseUp = (): void => {
         setCursor("grab");
     }
 

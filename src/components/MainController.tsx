@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import Box from './Box.tsx';
 import type { BoxProps } from "./Box.tsx";
 import BoxCreator from './BoxCreator.tsx';
-import type { BoxCreatorProps } from "./BoxCreator.tsx";
+import type { BoxCreatorProps, BoxCreatorMinProps } from "./BoxCreator.tsx";
 import BoxCreatorMenu from "./BoxCreatorMenu.tsx";
 
 type BoxType = BoxProps;
@@ -57,15 +57,17 @@ export default function MainController() {
         return key;
     }
 
-    const createBoxCreator = (creator: BoxCreatorType): number => {
+    const createBoxCreator = (creator: BoxCreatorMinProps): number => {
         const key = numBoxCreatorsCreated.current;
         numBoxCreatorsCreated.current++;
 
-        creator.boxCreatorKey = key;
-        creator.onMouseDown = handleMouseDownOnBoxCreator;
+        const newCreator: BoxCreatorProps = creator as unknown as BoxCreatorProps;
+
+        newCreator.boxCreatorKey = key;
+        newCreator.onMouseDown = handleMouseDownOnBoxCreator;
 
         setBoxCreators((prevCreators: BoxCreatorType[]): BoxCreatorType[] => {
-            const newCreators = [...prevCreators, creator];
+            const newCreators = [...prevCreators, newCreator];
             return newCreators;
         });
 
@@ -145,7 +147,7 @@ export default function MainController() {
     // (race condition between native and react synthetic events???)
     const handleMouseDownOnBoxCreator = (e: React.MouseEvent, boxCreator: BoxCreatorType, boxX: number, boxY: number) => {
         // if (isCreatorMenuVisible) return;
-        const boxProps = { ...boxCreator } as BoxType; // need a clone, not a reference
+        const boxProps: BoxProps = { ...boxCreator } as unknown as BoxProps; // need a clone, not a reference
         [boxProps.x, boxProps.y] = convertWindowPosToBoxAreaPos(boxX, boxY);
         createBox(boxProps);
 

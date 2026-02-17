@@ -1,10 +1,13 @@
 import { useRef } from 'react';
 
-export type BoxCreatorProps = {
-    boxCreatorKey: number,
+export type BoxCreatorMinProps = {
     width: number,
     height: number,
-    color: string,
+    color: string
+}
+
+export type BoxCreatorProps = BoxCreatorMinProps & {
+    boxCreatorKey: number,
     onMouseDown: (e: React.MouseEvent, boxCreator: BoxCreatorProps, boxX: number, boxY: number) => any
 }
 
