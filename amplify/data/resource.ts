@@ -9,9 +9,11 @@ and "delete" any "Todo" records.
 const schema = a.schema({
   Todo: a
     .model({
+      // fields in the table
       content: a.string(),
+      isDone: a.boolean()
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization((allow) => [allow.guest()]), // any user can do anything
 });
 
 export type Schema = ClientSchema<typeof schema>;

@@ -6,6 +6,11 @@ import BoxCreator from './BoxCreator.tsx';
 import type { BoxCreatorProps, BoxCreatorMinProps } from "./BoxCreator.tsx";
 import BoxCreatorMenu from "./BoxCreatorMenu.tsx";
 
+import { generateClient } from "aws-amplify/data";
+import type { Schema } from "../../amplify/data/resource";
+
+const client = generateClient<Schema>() // use this Data client for CRUDL requests
+
 type BoxType = BoxProps;
 type BoxCreatorType = BoxCreatorProps;
 
@@ -26,6 +31,9 @@ export default function MainController() {
 
     useEffect(() => { boxesRef.current = boxes }, [boxes]); // useState is asynchronous, so need this to get boxes at any time
     useEffect(() => { boxCreatorsRef.current = boxCreators }, [boxCreators]);
+    useEffect(() => {
+        client.models.Todo.create({content: "asdf", isDone: false});
+    }, []);
 
     const getNextZ = (): number => {
         return ++highestZ.current;
@@ -179,6 +187,8 @@ export default function MainController() {
                         <button onClick={makeCreatorMenuVisible} className="cursor-pointer">Add a box</button>
                         <button onClick={() => {
                             console.log("current box creators = " + JSON.stringify(boxCreatorsRef.current));
+                            
+
                         }}>Debug button</button>
                     </div>
                 </div>
