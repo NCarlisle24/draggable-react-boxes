@@ -6,10 +6,10 @@ import BoxCreator from './BoxCreator.tsx';
 import type { BoxCreatorProps, BoxCreatorMinProps } from "./BoxCreator.tsx";
 import BoxCreatorMenu from "./BoxCreatorMenu.tsx";
 
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "../../amplify/data/resource";
+// import { generateClient } from "aws-amplify/data";
+// import type { Schema } from "../../amplify/data/resource";
 
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
+// const client = generateClient<Schema>() // use this Data client for CRUDL requests
 
 type BoxType = BoxProps;
 type BoxCreatorType = BoxCreatorProps;
