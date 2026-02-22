@@ -31,9 +31,10 @@ export default function MainController() {
 
     useEffect(() => { boxesRef.current = boxes }, [boxes]); // useState is asynchronous, so need this to get boxes at any time
     useEffect(() => { boxCreatorsRef.current = boxCreators }, [boxCreators]);
-    useEffect(() => {
-        client.models.Todo.create({content: "asdf", isDone: false});
-    }, []);
+
+    // useEffect(() => {
+    //     client.models.Todo.create({content: "asdf", isDone: false});
+    // }, []);
 
     const getNextZ = (): number => {
         return ++highestZ.current;
