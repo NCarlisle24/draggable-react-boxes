@@ -6,10 +6,10 @@ import BoxCreator from './BoxCreator.tsx';
 import type { BoxCreatorProps, BoxCreatorMinProps } from "./BoxCreator.tsx";
 import BoxCreatorMenu from "./BoxCreatorMenu.tsx";
 
-// import { generateClient } from "aws-amplify/data";
-// import type { Schema } from "../../amplify/data/resource";
+import { generateClient } from "aws-amplify/data";
+import type { Schema } from "../../amplify/data/resource";
 
-// const client = generateClient<Schema>() // use this Data client for CRUDL requests
+const client = generateClient<Schema>() // use this Data client for CRUDL requests
 
 type BoxType = BoxProps;
 type BoxCreatorType = BoxCreatorProps;
@@ -32,9 +32,10 @@ export default function MainController() {
     useEffect(() => { boxesRef.current = boxes }, [boxes]); // useState is asynchronous, so need this to get boxes at any time
     useEffect(() => { boxCreatorsRef.current = boxCreators }, [boxCreators]);
 
-    // useEffect(() => {
-    //     client.models.Todo.create({content: "asdf", isDone: false});
-    // }, []);
+    useEffect(() => {
+        const boxCreator = client.models.BoxCreator.get({id: "0"});
+        console.log(JSON.stringify(boxCreator));
+    }, []);
 
     const getNextZ = (): number => {
         return ++highestZ.current;
@@ -78,6 +79,13 @@ export default function MainController() {
         setBoxCreators((prevCreators: BoxCreatorType[]): BoxCreatorType[] => {
             const newCreators = [...prevCreators, newCreator];
             return newCreators;
+        });
+
+        client.models.BoxCreator.create({
+            id: key.toString(), 
+            width: creator.width,
+            height: creator.height,
+            color: creator.color 
         });
 
         return key;
