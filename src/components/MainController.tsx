@@ -14,6 +14,17 @@ const client = generateClient<Schema>() // use this Data client for CRUDL reques
 type BoxType = BoxProps;
 type BoxCreatorType = BoxCreatorProps;
 
+const getDbBoxCreators = async () => {
+    const { data: boxCreators, errors } = await client.models.BoxCreator.list();
+
+    if (errors) {
+        console.log(errors);
+        return null;
+    }
+
+    return boxCreators;
+};
+
 export default function MainController() {
     const [boxCreators, setBoxCreators] = useState<BoxCreatorType[]>([]);
     const [boxes, setBoxes] = useState<BoxType[]>([]);
@@ -33,8 +44,17 @@ export default function MainController() {
     useEffect(() => { boxCreatorsRef.current = boxCreators }, [boxCreators]);
 
     useEffect(() => {
-        const boxCreator = client.models.BoxCreator.get({id: "0"});
-        console.log(JSON.stringify(boxCreator));
+        const rawBoxCreatorsPromise = getDbBoxCreators();
+        rawBoxCreatorsPromise.then((rawBoxCreators) => {
+            console.log(JSON.stringify(rawBoxCreators));
+            rawBoxCreators!.map((rawCreator) => {
+                createBoxCreator({
+                    width: rawCreator.width!,
+                    height: rawCreator.height!,
+                    color: rawCreator.color!
+                });
+            });
+        });
     }, []);
 
     const getNextZ = (): number => {
@@ -71,7 +91,7 @@ export default function MainController() {
         const key = numBoxCreatorsCreated.current;
         numBoxCreatorsCreated.current++;
 
-        const newCreator: BoxCreatorProps = creator as unknown as BoxCreatorProps;
+        const newCreator: BoxCreatorProps = creator as unknown as BoxCreatorProps; // cancerous
 
         newCreator.boxCreatorKey = key;
         newCreator.onMouseDown = handleMouseDownOnBoxCreator;
